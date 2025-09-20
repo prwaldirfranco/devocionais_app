@@ -1,27 +1,69 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div style="display:flex; flex-wrap:wrap; gap:30px;">
+<style>
+  /* Garante que a largura se adapte ao celular */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .container-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  /* No PC (largura acima de 900px) → 3 colunas */
+  @media (min-width: 900px) {
+    .col-left { flex: 1; }
+    .col-center { flex: 2; }
+    .col-right { flex: 1; }
+  }
+
+  /* No tablet (entre 600px e 900px) → 2 colunas */
+  @media (max-width: 899px) and (min-width: 600px) {
+    .col-left, .col-right { flex: 1 1 100%; }
+    .col-center { flex: 2 1 100%; }
+  }
+
+  /* No celular (até 599px) → tudo empilhado */
+  @media (max-width: 599px) {
+    .container-flex {
+      flex-direction: column;
+    }
+    .col-left, .col-center, .col-right {
+      flex: 1 1 100%;
+    }
+    img {
+      max-width: 80%;
+      margin: auto;
+      display: block;
+    }
+  }
+</style>
+
+<div class="container-flex">
 
   <!-- Coluna versículo diário (esquerda) -->
-  <div style="flex:1; min-width:200px; background:#f0f8ff; padding:15px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <h3 style="color:#2980b9; margin-bottom:10px;">📖 Versículo do Dia</h3>
-    <p id="versiculo-texto" style="font-size:16px; color:#2c3e50; line-height:1.4;">"{{ versiculo_texto }}"</p>
-    <p id="versiculo-ref" style="font-size:14px; color:#555; text-align:right; margin-top:6px;">— {{ versiculo_ref }}</p>
+  <div class="col-left" style="background:#f0f8ff; padding:15px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3 style="color:#2980b9;">📖 Versículo do Dia</h3>
+    <p id="versiculo-texto" style="font-size:16px; color:#2c3e50;">"{{ versiculo_texto }}"</p>
+    <p id="versiculo-ref" style="font-size:14px; color:#555; text-align:right;">— {{ versiculo_ref }}</p>
   </div>
 
   <!-- Coluna devocionais (centro) -->
-  <div style="flex:2; min-width:300px;">
-    <h2 style="color:#2c3e50; margin-bottom:15px;">📜 Devocionais e Pregações</h2>
+  <div class="col-center">
+    <h2 style="color:#2c3e50;">📜 Devocionais e Pregações</h2>
 
     <!-- Barra de pesquisa -->
     <form method="GET" style="margin-bottom:20px; display:flex; gap:10px;">
-        <input type="text" name="q" placeholder="Pesquisar por título..." value="{{ query }}" style="flex:1; padding:10px; border-radius:6px; border:1px solid #ccc;">
-        <button type="submit" style="padding:10px 14px; background:#2980b9; color:white; border:none; border-radius:6px;">Buscar</button>
+        <input type="text" name="q" placeholder="Pesquisar por título..." value="{{ query }}" style="flex:1; padding:8px; border-radius:6px; border:1px solid #ccc;">
+        <button type="submit" style="padding:8px 12px; background:#2980b9; color:white; border:none; border-radius:6px;">Buscar</button>
     </form>
 
     {% for dev in devocionais %}
-    <div style="background:#f9fafc; padding:15px; margin-bottom:12px; border-radius:8px; border:1px solid #dcdcdc; box-shadow:0 2px 6px rgba(0,0,0,0.05); transition: transform 0.2s;">
+    <div style="background:#f9fafc; padding:15px; margin-bottom:12px; border-radius:8px; border:1px solid #dcdcdc; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
         <a href="{{ url_for('view', devocional_id=dev[0]) }}" style="text-decoration:none; color:#2c3e50;">
             <h3 style="margin:0; display:flex; justify-content:space-between; align-items:center;">
                 {{ dev[1] }}
@@ -32,7 +74,7 @@
                 {% endif %}
             </h3>
             {% if dev[3] %}
-            <p style="margin-top:6px; color:#555; line-height:1.5;">{{ dev[3][:120] }}{% if dev[3]|length > 120 %}...{% endif %}</p>
+            <p style="margin-top:6px; color:#555;">{{ dev[3][:120] }}{% if dev[3]|length > 120 %}...{% endif %}</p>
             {% endif %}
         </a>
 
@@ -49,14 +91,16 @@
   </div>
 
   <!-- Coluna sobre o pastor (direita) -->
-  <div style="flex:1; min-width:250px; background:#eef2f7; padding:15px 20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <h2 style="color:#2c3e50; margin-bottom:10px;">Pastor Waldir Júnior</h2>
-    <img src="{{ url_for('static', filename='foto_pastor.jpg') }}" alt="Pastor Waldir" style="width:80%; max-width:180px; display:block; margin:0 auto 15px auto; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,0.2);">
-    <p style="color:#2c3e50; font-size:14px; line-height:1.5; margin-bottom:10px;">
-        Pr. Waldir Júnior é líder da Comunidade Batista Vida Efatá, pastor há 11 anos e dedicado a compartilhar a Palavra de Deus com amor e sabedoria. Ministrando devocionais, pregações e estudos bíblicos, ele guia a igreja com zelo pastoral e coração missionário.
+  <div class="col-right" style="background:#eef2f7; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h2 style="color:#2c3e50;">Sobre o Pastor Waldir Júnior</h2>
+    <img src="{{ url_for('static', filename='foto_pastor.jpg') }}" alt="Pastor Waldir" style="width:100%; border-radius:100%; margin-top:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+    <p style="text-align:justify; color:#333; line-height:1.5;">
+      Pr. Waldir Júnior é líder da Comunidade Batista Vida Efatá, pastor há 11 anos e dedicado a compartilhar a Palavra de Deus com amor e sabedoria. 
+      Ministrando devocionais, pregações e estudos bíblicos, ele guia a igreja com zelo pastoral e coração missionário.
     </p>
-    <p style="color:#2c3e50; font-size:14px; line-height:1.5;">
-        Seu objetivo é ajudar pessoas a crescerem espiritualmente, alcançando restauração, fé prática e intimidade com Cristo. Autor de materiais devocionais e livros voltados para líderes e cristãos que buscam aprofundar sua caminhada com Deus.
+    <p style="text-align:justify; color:#333; line-height:1.5;">
+      Seu objetivo é ajudar pessoas a crescerem espiritualmente, alcançando restauração, fé prática e intimidade com Cristo. 
+      Autor de materiais devocionais e livros voltados para líderes e cristãos que buscam aprofundar sua caminhada com Deus.
     </p>
   </div>
 
@@ -77,7 +121,7 @@ buttons.forEach(btn => {
     });
 });
 
-// Atualizar versículo automaticamente a cada 24h
+// Atualizar versículo automaticamente a cada 24h (86400000ms)
 async function atualizarVersiculo() {
     try {
         const resp = await fetch('/api/versiculo');
@@ -90,7 +134,11 @@ async function atualizarVersiculo() {
         console.error('Erro ao atualizar versículo', e);
     }
 }
+
+// Atualiza na primeira carga
 atualizarVersiculo();
+
+// Intervalo para atualizar a cada 24 horas
 setInterval(atualizarVersiculo, 86400000);
 </script>
 
