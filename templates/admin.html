@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2 style="color:#2c3e50;">Painel Admin — Devocionais & Pregações</h2>
+    <a href="{{ url_for('logout') }}" style="background:#e74c3c; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">Sair</a>
+</div>
+
+<!-- Formulário adicionar novo -->
+<div style="margin-bottom:30px; background:#eef2f7; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3 style="margin-top:0;">➕ Adicionar Novo Devocional/Pregação</h3>
+    <form method="POST" action="{{ url_for('add_devocional') }}">
+        <input type="text" name="titulo" placeholder="Título" required style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:1px solid #ccc;">
+        
+        <textarea name="conteudo" rows="6" placeholder="Digite o conteúdo" required style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:1px solid #ccc;"></textarea>
+
+        <!-- Dropdown para tipo -->
+        <label>Tipo:</label>
+        <select name="tipo" style="padding:6px 8px; border-radius:6px; border:1px solid #ccc; margin-bottom:10px;">
+            <option value="devocional">Devocional</option>
+            <option value="pregacao">Pregação</option>
+        </select>
+
+        <input type="submit" value="Salvar" style="background:#27ae60; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">
+    </form>
+</div>
+
+<!-- Lista de devocionais -->
+<h3 style="color:#2c3e50; margin-bottom:10px;">Lista de Devocionais & Pregações</h3>
+{% if devocionais %}
+<table style="width:100%; border-collapse:collapse;">
+    <thead>
+        <tr style="background:#bdc3c7; text-align:left;">
+            <th style="padding:10px; border:1px solid #ccc;">Título</th>
+            <th style="padding:10px; border:1px solid #ccc;">Tipo</th>
+            <th style="padding:10px; border:1px solid #ccc;">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for dev in devocionais %}
+        <tr style="border:1px solid #ccc;">
+            <td style="padding:8px;">{{ dev[1] }}</td>
+            <td style="padding:8px;">
+                {% if dev[2] == 'devocional' %}
+                    <span style="background:#27ae60; color:white; padding:2px 6px; border-radius:4px;">Devocional</span>
+                {% else %}
+                    <span style="background:#2980b9; color:white; padding:2px 6px; border-radius:4px;">Pregação</span>
+                {% endif %}
+            </td>
+            <td style="padding:8px;">
+                <a href="{{ url_for('edit_devocional', id=dev[0]) }}" style="background:#f39c12; color:white; padding:4px 8px; border-radius:4px; text-decoration:none; margin-right:4px;">Editar</a>
+                <a href="{{ url_for('delete_devocional', id=dev[0]) }}" style="background:#e74c3c; color:white; padding:4px 8px; border-radius:4px; text-decoration:none;" onclick="return confirm('Deseja realmente excluir este item?')">Excluir</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Nenhum devocional encontrado.</p>
+{% endif %}
+
+{% endblock %}

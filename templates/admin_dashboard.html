@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Painel Admin{% endblock %}
+{% block content %}
+<h2>Painel Administrativo</h2>
+<a href="{{ url_for('admin_create') }}" class="btn btn-success mb-3">+ Novo</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Título</th>
+      <th>Tipo</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in conteudos %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td>{{ c.titulo }}</td>
+      <td>{{ c.tipo }}</td>
+      <td>
+        <a href="{{ url_for('admin_edit', id=c.id) }}" class="btn btn-warning btn-sm">Editar</a>
+        <a href="{{ url_for('admin_delete', id=c.id) }}" class="btn btn-danger btn-sm">Excluir</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

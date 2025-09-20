@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}{{ acao }} Conteúdo{% endblock %}
+{% block content %}
+<h2>{{ acao }} Conteúdo</h2>
+<form method="post">
+  <div class="mb-3">
+    <label>Título</label>
+    <input type="text" name="titulo" class="form-control" value="{{ conteudo.titulo if conteudo }}">
+  </div>
+  <div class="mb-3">
+    <label>Tipo</label>
+    <select name="tipo" class="form-control">
+      <option value="Devocional" {% if conteudo and conteudo.tipo == 'Devocional' %}selected{% endif %}>Devocional</option>
+      <option value="Pregação" {% if conteudo and conteudo.tipo == 'Pregação' %}selected{% endif %}>Pregação</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label>Texto</label>
+    <textarea name="texto" class="form-control" rows="6">{{ conteudo.texto if conteudo }}</textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">{{ acao }}</button>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="max-width:700px; margin:0 auto; background:#eef2f7; padding:25px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+    <h2 style="margin-top:0; color:#2c3e50;">✏️ Editar Devocional/Pregação</h2>
+    
+    <form method="POST">
+        <label>Título:</label>
+        <input type="text" name="titulo" value="{{ devocional[0] }}" required 
+               style="width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc;">
+
+        <label>Conteúdo:</label>
+        <textarea name="conteudo" rows="8" required
+                  style="width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc;">{{ devocional[1] }}</textarea>
+
+        <label>Tipo:</label>
+        <select name="tipo" style="padding:8px 10px; border-radius:6px; border:1px solid #ccc; margin-bottom:15px;">
+            <option value="devocional" {% if devocional[2] == 'devocional' %}selected{% endif %}>Devocional</option>
+            <option value="pregacao" {% if devocional[2] == 'pregacao' %}selected{% endif %}>Pregação</option>
+        </select>
+
+        <div style="display:flex; gap:10px;">
+            <input type="submit" value="Salvar Alterações" 
+                   style="background:#27ae60; color:white; border:none; padding:10px 16px; border-radius:6px; cursor:pointer; flex:1;">
+            <a href="{{ url_for('admin') }}" 
+               style="background:#e74c3c; color:white; text-align:center; padding:10px 16px; border-radius:6px; text-decoration:none; flex:1;">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
